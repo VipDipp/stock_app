@@ -5,8 +5,12 @@ const User = sequelize.define('user', {
     id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
     email: { type: DataTypes.STRING, unique: true },
     password: { type: DataTypes.STRING },
-    balance: { type: DataTypes.INTEGER, defaultValue: 0 },
+    quantity: { type: DataTypes.INTEGER, defaultValue: 0 },
     role: { type: DataTypes.STRING, defaultValue: 'USER' }
+})
+
+const Balance = sequelize.define('balance', {
+    id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true }
 })
 
 const Bet = sequelize.define('bet', {
@@ -16,7 +20,8 @@ const Bet = sequelize.define('bet', {
 })
 
 const Shapes = sequelize.define('shapes', {
-    id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true }
+    id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+    shapes: { type: DataTypes.ARRAY(DataTypes.STRING) }
 })
 
 User.hasMany(Shapes);
@@ -25,8 +30,12 @@ Shapes.belongsTo(User);
 User.hasOne(Bet);
 Bet.belongsTo(User);
 
+User.hasOne(Balance);
+Balance.belongsTo(User);
+
 module.exports = {
     User,
     Bet,
-    Shapes
+    Shapes,
+    Balance
 }
