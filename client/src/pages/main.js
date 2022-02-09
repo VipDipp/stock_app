@@ -3,9 +3,9 @@ import React from 'react';
 function Main() {
     return ( 
         <div>
-             
+            yes
         </div>
     );
 }
 
-export default main;
+export default Main;
