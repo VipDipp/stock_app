@@ -20,12 +20,12 @@ const NavBar = observer(() => {
                     <Image width={200} height={100} src={logo} />
                 </NavLink>
                 {user.isAuth ? 
-                <Nav className="ml-15">
-                    <Button> Баланс </Button>
+                <Nav>
+                    <Button variant={"outline-light"}> Баланс </Button>
                 </Nav>
                 :
-                <Nav className="ml-15">
-                    <Button variant={"outline-light"}> Авторизация </Button>
+                <Nav>
+                    <Button variant={"outline-light"} onClick={() => user.setIsAuth(true)}> Авторизация </Button>
                 </Nav>
                 }
             </Container>
