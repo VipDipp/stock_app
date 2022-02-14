@@ -1,24 +1,29 @@
-import React from 'react';
+import { observer } from 'mobx-react-lite';
+import React, {useContext, useState} from 'react';
 import { Button, Container, Form, Row } from 'react-bootstrap';
 import Card from 'react-bootstrap/Card';
 import { NavLink, useLocation } from 'react-router-dom';
-import { login } from '../../../server/controllers/userController';
+import { Context } from '../index';
+import { login } from '../http/userAPI';
 import { registration } from '../http/userAPI';
 import { LOGIN_ROUTE, REGISTRATION_ROUTE } from '../utils/consts';
 
-function Auth() {
+const Auth = observer(() => {
+    const {user} = useContext(Context);
     const location = useLocation();
     const isLogin = location.pathname === LOGIN_ROUTE;
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
     const click = async () => {
+        let data;
         if (isLogin) {
-            const response = await login();
+            data = await login(email, password);
         } else {
-            const response = await registration();
-            console.log(response);
+            data = await registration(email, password);
         }
+        user.setUser(user);
+        user.setIsAuth(true);
     }
 
     return ( 
@@ -34,13 +39,14 @@ function Auth() {
                             className='mt-3'
                             placeholder='Введите ваш e-mail...' 
                             value={email}
-                            onChange={e => setEmail()}
+                            onChange={e => setEmail(e.target.value)}
                         />
                         <Form.Control 
                             className='mt-3'
                             placeholder='Введите ваш пароль...' 
                             value={password}
-                            onChange={e => setPassword()}
+                            onChange={e => setPassword(e.target.value)}
+                            type='password'
                         />
                         <Row className='d-flex justify-content-between mt-3 pl-3 pr-3'>
                             {isLogin ?
@@ -55,6 +61,7 @@ function Auth() {
                             <Button  
                                 className='align-self-end'
                                 variant={'outline-success'}
+                                onClick={click}
                             >
                                 {isLogin ? 'Войти' : 'Зарегестрироваться'} 
                             </Button>
@@ -64,6 +71,6 @@ function Auth() {
             </Container>
         </div>
     );
-}
+});
 
 export default Auth;
