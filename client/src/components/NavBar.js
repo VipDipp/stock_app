@@ -4,15 +4,21 @@ import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
 import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
-import { NavLink } from 'react-router-dom';
-import { MAIN_ROUTE } from '../utils/consts';
+import { NavLink, useNavigate } from 'react-router-dom';
+import { BALANCE_ROUTE, LOGIN_ROUTE, MAIN_ROUTE } from '../utils/consts';
 import { observer } from 'mobx-react-lite';
 import logo from '../assets/logo.png';
 import AppRouter from './AppRouter';
 import Image from 'react-bootstrap/Image';
 
 const NavBar = observer(() => {
+    const navigate = useNavigate();
     const {user} = useContext(Context);
+
+    const logOut = () => {
+        user.setUser({});
+        user.setIsAuth(false);
+    }
     return ( 
         <Navbar bg="dark" variant="dark">
             <Container>
@@ -21,11 +27,28 @@ const NavBar = observer(() => {
                 </NavLink>
                 {user.isAuth ? 
                 <Nav>
-                    <Button variant={"outline-light"}> Баланс </Button>
+                    <Button 
+                    variant={"outline-light"}
+                    onClick={() => navigate(BALANCE_ROUTE)}
+                    > 
+                        Баланс 
+                    </Button>
+
+                    <Button
+                    variant={"outline-light"}
+                    onClick={() => logOut()}
+                    >
+                        Выйти
+                    </Button>
                 </Nav>
                 :
                 <Nav>
-                    <Button variant={"outline-light"} onClick={() => user.setIsAuth(true)}> Авторизация </Button>
+                    <Button 
+                    variant={"outline-light"} 
+                    onClick={() => navigate(LOGIN_ROUTE)}
+                    > 
+                        Войти 
+                    </Button>
                 </Nav>
                 }
             </Container>
